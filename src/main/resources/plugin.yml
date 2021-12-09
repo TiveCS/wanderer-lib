@@ -1,0 +1,8 @@
+name: WandererLib
+main: io.github.tivecs.wanderer.WandererLib
+version: 1.0.0
+api-version: 1.13
+author: TiveCS
+commands:
+  wanderer:
+    description: main command wanderer lib

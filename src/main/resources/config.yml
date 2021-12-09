@@ -1,0 +1,8 @@
+test: 'Hello boy'
+nested:
+  data-1: 'Hello'
+  data-2: 12
+list:
+  - 'Interview'
+  - 'Shadow'
+  - 'Multiverse'
