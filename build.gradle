@@ -3,7 +3,7 @@ plugins {
     id 'com.github.johnrengelman.shadow' version '6.1.0'
 }
 
-group 'io.github.tivecs.wanderer'
+group 'io.github.tivecs'
 version '1.0.0'
 
 repositories {
