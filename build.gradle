@@ -1,6 +1,5 @@
 plugins {
     id 'java'
-    id 'com.github.johnrengelman.shadow' version '6.1.0'
 }
 
 group 'io.github.tivecs'
@@ -29,12 +28,6 @@ dependencies {
 
     compileOnly group: 'com.google.code.findbugs',  name: 'jsr305', version: '3.0.2'
     compileOnly 'org.spigotmc:spigot-api:1.16.1-R0.1-SNAPSHOT' // The Spigot API with no shadowing. Requires the OSS repo.
-}
-
-shadowJar{
-    manifest {
-        attributes 'Main-Class': 'io.github.tivecs.wanderer.WandererLib'
-    }
 }
 
 test {
