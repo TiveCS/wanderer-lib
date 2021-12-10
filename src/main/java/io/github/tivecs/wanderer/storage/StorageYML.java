@@ -23,6 +23,12 @@ public class StorageYML extends Storage{
         this.config = YamlConfiguration.loadConfiguration(file);
     }
 
+    public StorageYML(String id, FileConfiguration configuration){
+        super(id);
+        this.dataChanges = initializeDataMap();
+        this.config = configuration;
+    }
+
     @Override
     public void writeData(HashMap<Object, Object> args) {
         String path = args.get("path").toString();
@@ -77,10 +83,6 @@ public class StorageYML extends Storage{
     @Override
     public Map<Object, Object> initializeDataMap() {
         return new ConcurrentHashMap<>();
-    }
-
-    public File getFile() {
-        return file;
     }
 
     public FileConfiguration getConfig() {
