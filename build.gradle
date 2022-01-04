@@ -7,6 +7,7 @@ version '1.0.0'
 
 repositories {
     mavenCentral()
+    mavenLocal()
 
     maven {
         url = 'https://hub.spigotmc.org/nexus/content/repositories/snapshots/'
@@ -27,7 +28,7 @@ dependencies {
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine'
 
     compileOnly group: 'com.google.code.findbugs',  name: 'jsr305', version: '3.0.2'
-    compileOnly 'org.spigotmc:spigot-api:1.16.1-R0.1-SNAPSHOT' // The Spigot API with no shadowing. Requires the OSS repo.
+    compileOnly 'org.spigotmc:spigot:1.16.1-R0.1-SNAPSHOT' // The Spigot API with no shadowing. Requires the OSS repo.
 }
 
 test {
