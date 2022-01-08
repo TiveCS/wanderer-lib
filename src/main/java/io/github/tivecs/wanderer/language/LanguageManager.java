@@ -21,8 +21,9 @@ public class LanguageManager {
         this.plugin = plugin;
     }
 
-    public void sendMessage(Player player, String messagePath){sendMessage(player, messagePath, getDefaultLanguage(), false);}
-    public void sendMessage(Player player, String messagePath, Language language){sendMessage(player, messagePath, language, false);}
+    public void sendMessage(Player player, String messagePath){sendMessage(player, messagePath, getDefaultLanguage(), true);}
+    public void sendMessage(Player player, String messagePath, boolean colored){sendMessage(player, messagePath, getDefaultLanguage(), colored);}
+    public void sendMessage(Player player, String messagePath, Language language){sendMessage(player, messagePath, language, true);}
     public void sendMessage(Player player, String messagePath, Language language, boolean colored){
         Message msgObject = language.getMessage(messagePath);
         List<String> msg = msgObject.getMessages();
@@ -54,6 +55,22 @@ public class LanguageManager {
 
     public void setDefaultLanguage(Language defaultLanguage) {
         this.defaultLanguage = defaultLanguage;
+    }
+
+    public List<String> getMessage(String messagePath, @Nonnull Language language){
+        return language.getMessage(messagePath).getMessages();
+    }
+
+    public List<String> getMessage(String messagePath, @Nonnull String langId){
+        Language language = getLanguage(langId);
+        if (language != null){
+            return language.getMessage(messagePath).getMessages();
+        }
+        return null;
+    }
+
+    public List<String> getMessage(String messagePath){
+        return getMessage(messagePath, getDefaultLanguage());
     }
 
     public Language getLanguage(@Nonnull String langId){
