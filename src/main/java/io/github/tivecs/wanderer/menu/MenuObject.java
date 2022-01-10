@@ -61,7 +61,7 @@ public class MenuObject {
                     MenuComponent component = getMenu().findComponent(mapId);
 
                     if (component != null){
-                        MenuComponentObject componentObject = component.render(getProps());
+                        MenuComponentObject componentObject = component.render(this, getProps());
                         componentObject.render();
                         getComponentMap().put(slot, componentObject);
                     }

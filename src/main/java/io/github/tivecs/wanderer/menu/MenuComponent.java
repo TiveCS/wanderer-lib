@@ -1,10 +1,15 @@
 package io.github.tivecs.wanderer.menu;
 
+import io.github.tivecs.wanderer.menu.events.ComponentPostRenderEvent;
+import io.github.tivecs.wanderer.menu.events.ComponentPreRenderEvent;
 import io.github.tivecs.wanderer.utils.StringUtils;
 import io.github.tivecs.wanderer.utils.XMaterial;
+import org.bukkit.Bukkit;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.HashMap;
 import java.util.List;
 
@@ -39,15 +44,19 @@ public class MenuComponent {
         return item;
     }
 
-    // TODO Add component event
-    public MenuComponentObject render(HashMap<String, Object> props){
+    public MenuComponentObject render(@Nonnull MenuObject menuObject, @Nullable HashMap<String, Object> props){
         MenuComponentObject object = new MenuComponentObject(getComponentId());
+        ComponentPreRenderEvent preRenderEvent = new ComponentPreRenderEvent(menuObject, this, object, props);
+        Bukkit.getPluginManager().callEvent(preRenderEvent);
+
         if (props != null) object.getProps().putAll(props);
         object.getStates().putAll(getStates());
         object.updatePlaceholder();
         object.setBaseItem(createItem());
 
         object.render();
+        ComponentPostRenderEvent postRenderEvent = new ComponentPostRenderEvent(menuObject, this, object);
+        Bukkit.getPluginManager().callEvent(postRenderEvent);
         return object;
     }
 

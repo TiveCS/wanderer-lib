@@ -1,27 +1,26 @@
 package io.github.tivecs.wanderer.menu;
 
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.Listener;
-import org.bukkit.event.inventory.InventoryClickEvent;
-import org.bukkit.event.inventory.InventoryCloseEvent;
-import org.bukkit.event.inventory.InventoryOpenEvent;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.HashMap;
 import java.util.UUID;
 
-public class MenuManager implements Listener {
+public class MenuManager{
 
     private final JavaPlugin plugin;
+    private final MenuEventHandler eventHandler;
     private final HashMap<String, Menu> menus = new HashMap<>();
     private final HashMap<UUID, MenuObject> playerMenu = new HashMap<>();
 
     public MenuManager(@Nonnull JavaPlugin plugin){
         this.plugin = plugin;
+        this.eventHandler = new MenuEventHandler(this);
 
-        plugin.getServer().getPluginManager().registerEvents(this, plugin);
+       Bukkit.getPluginManager().registerEvents(this.eventHandler, plugin);
     }
 
     public void registerMenu(Menu... menus){
@@ -30,30 +29,7 @@ public class MenuManager implements Listener {
         }
     }
 
-    @EventHandler
-    public void onInventoryClick(InventoryClickEvent event){
-        UUID user = event.getWhoClicked().getUniqueId();
-        MenuObject mo = getPlayerMenu().get(user);
-        if (mo != null) mo.getMenu().onMenuClick(mo, event);
-    }
-
-    @EventHandler
-    public void onInventoryOpen(InventoryOpenEvent event){
-        UUID user = event.getPlayer().getUniqueId();
-        MenuObject mo = getPlayerMenu().get(user);
-        if (mo != null) mo.getMenu().onMenuOpen(mo, event);
-    }
-
-    @EventHandler
-    public void onInventoryOpen(InventoryCloseEvent event){
-        UUID user = event.getPlayer().getUniqueId();
-        MenuObject mo = getPlayerMenu().get(user);
-        if (mo != null) mo.getMenu().onMenuClose(mo, event);
-    }
-
-
-
-    public void open(Player player, String menuId, int page, HashMap<String, Object> props){
+    public void open(@Nonnull Player player, @Nonnull String menuId, int page, @Nullable HashMap<String, Object> props){
         Menu m = findMenu(menuId);
         if (m != null){
             MenuObject mo = m.toObject(props, page);
@@ -61,7 +37,7 @@ public class MenuManager implements Listener {
         }
     }
 
-    public Menu findMenu(String menuId){
+    public Menu findMenu(@Nonnull String menuId){
         return getMenus().get(menuId);
     }
 
@@ -75,5 +51,9 @@ public class MenuManager implements Listener {
 
     public JavaPlugin getPlugin() {
         return plugin;
+    }
+
+    public MenuEventHandler getEventHandler() {
+        return eventHandler;
     }
 }
