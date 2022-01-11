@@ -1,22 +1,33 @@
 package io.github.tivecs.wanderer.menu;
 
 import io.github.tivecs.wanderer.language.Placeholder;
+import io.github.tivecs.wanderer.menu.events.ComponentStateUpdateEvent;
+import org.bukkit.Bukkit;
 import org.bukkit.inventory.ItemStack;
 
+import javax.annotation.Nonnull;
 import java.util.HashMap;
 import java.util.Map;
 
 public class MenuComponentObject {
 
-    private final String componentId;
+    private final MenuObject menuObject;
+    private final MenuComponent component;
     private final Placeholder placeholder = new Placeholder();
     private final HashMap<String, Object> states = new HashMap<>();
     private final HashMap<String, Object> props = new HashMap<>();
 
     private ItemStack baseItem = null, currentItem = null;
 
-    public MenuComponentObject(String componentId){
-        this.componentId = componentId;
+    public MenuComponentObject(@Nonnull MenuObject menuObject, @Nonnull MenuComponent component){
+        this.menuObject = menuObject;
+        this.component = component;
+    }
+
+    public void updateState(String key, Object value){
+        ComponentStateUpdateEvent stateUpdateEvent = new ComponentStateUpdateEvent(this, key, getStates().get(key), value);
+        getStates().put(key, value);
+        Bukkit.getPluginManager().callEvent(stateUpdateEvent);
     }
 
     public void render(){
@@ -44,8 +55,8 @@ public class MenuComponentObject {
         this.currentItem = currentItem;
     }
 
-    public String getComponentId() {
-        return componentId;
+    public MenuComponent getComponent() {
+        return component;
     }
 
     public HashMap<String, Object> getStates() {
@@ -58,6 +69,10 @@ public class MenuComponentObject {
 
     public ItemStack getBaseItem() {
         return baseItem;
+    }
+
+    public MenuObject getMenuObject() {
+        return menuObject;
     }
 
     public Placeholder getPlaceholder() {

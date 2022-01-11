@@ -27,7 +27,7 @@ public class ComponentClickEvent extends Event implements Cancellable {
         this.isCancelled = false;
         this.slot = slot;
         this.componentObject = componentObject;
-        this.component = menuObject.getMenu().findComponent(componentObject.getComponentId());
+        this.component = componentObject.getComponent();
         this.clickEvent = clickEvent;
     }
 

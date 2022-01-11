@@ -1,6 +1,9 @@
 package io.github.tivecs.wanderer.menu;
 
 import io.github.tivecs.wanderer.language.Placeholder;
+import io.github.tivecs.wanderer.menu.events.MenuPostRenderEvent;
+import io.github.tivecs.wanderer.menu.events.MenuPreRenderEvent;
+import io.github.tivecs.wanderer.menu.events.MenuStateUpdateEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.inventory.InventoryOpenEvent;
@@ -20,7 +23,6 @@ public abstract class Menu {
     private final HashMap<String, Object> states = new HashMap<>();
 
     private String title;
-    private MenuInteraction interaction = null;
 
     public Menu(String id, String title){
         this.id = id;
@@ -32,6 +34,9 @@ public abstract class Menu {
     }
 
     public abstract void onMenuClick(MenuObject menuObject, InventoryClickEvent event);
+    public abstract void onMenuStateUpdate(MenuStateUpdateEvent event);
+    public abstract void onMenuPreRender(MenuPreRenderEvent event);
+    public abstract void onMenuPostRender(MenuPostRenderEvent event);
     public abstract void onMenuOpen(MenuObject menuObject, InventoryOpenEvent event);
     public abstract void onMenuClose(MenuObject menuObject, InventoryCloseEvent event);
 
@@ -86,10 +91,6 @@ public abstract class Menu {
         this.title = title;
     }
 
-    public void setInteraction(MenuInteraction interaction) {
-        this.interaction = interaction;
-    }
-
     public String getTitle() {
         return title;
     }
@@ -112,10 +113,6 @@ public abstract class Menu {
 
     public HashMap<String, MenuComponent> getComponents() {
         return components;
-    }
-
-    public MenuInteraction getInteraction() {
-        return interaction;
     }
 
     public String getId() {

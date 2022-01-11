@@ -1,8 +1,6 @@
 package io.github.tivecs.wanderer.menu;
 
-import io.github.tivecs.wanderer.menu.events.ComponentClickEvent;
-import io.github.tivecs.wanderer.menu.events.ComponentPostRenderEvent;
-import io.github.tivecs.wanderer.menu.events.ComponentPreRenderEvent;
+import io.github.tivecs.wanderer.menu.events.*;
 import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -15,10 +13,25 @@ import java.util.UUID;
 
 public class MenuEventHandler implements Listener {
 
-    private MenuManager manager;
+    private final MenuManager manager;
 
     public MenuEventHandler(MenuManager manager){
         this.manager = manager;
+    }
+
+    @EventHandler(priority = EventPriority.LOWEST)
+    public void onMenuStateUpdate(MenuStateUpdateEvent event){
+        event.getMenuObject().getMenu().onMenuStateUpdate(event);
+    }
+
+    @EventHandler(priority = EventPriority.LOWEST)
+    public void onMenuPreRender(MenuPreRenderEvent event){
+        event.getMenuObject().getMenu().onMenuPreRender(event);
+    }
+
+    @EventHandler(priority = EventPriority.LOWEST)
+    public void onMenuPostRender(MenuPostRenderEvent event){
+        event.getMenuObject().getMenu().onMenuPostRender(event);
     }
 
     @EventHandler(priority = EventPriority.LOWEST)
@@ -34,6 +47,14 @@ public class MenuEventHandler implements Listener {
                 ComponentClickEvent componentClickEvent = new ComponentClickEvent(mo, componentObject, slot, event);
                 Bukkit.getPluginManager().callEvent(componentClickEvent);
             }
+        }
+    }
+
+    @EventHandler(priority = EventPriority.LOWEST)
+    public void onComponentStateUpdate(ComponentStateUpdateEvent event){
+        MenuComponentInteraction interaction = event.getComponentObject().getComponent().getInteraction();
+        if (interaction != null){
+            interaction.onStateUpdate(event);
         }
     }
 

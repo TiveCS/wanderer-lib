@@ -1,6 +1,9 @@
 package io.github.tivecs.wanderer.menu;
 
 import io.github.tivecs.wanderer.language.Placeholder;
+import io.github.tivecs.wanderer.menu.events.MenuPostRenderEvent;
+import io.github.tivecs.wanderer.menu.events.MenuPreRenderEvent;
+import io.github.tivecs.wanderer.menu.events.MenuStateUpdateEvent;
 import io.github.tivecs.wanderer.utils.StringUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.inventory.Inventory;
@@ -19,7 +22,7 @@ public class MenuObject {
 
     private Inventory inventory = null;
     private int row = 3;
-    private int page = -1;
+    private int page = -1, previousPage = -1;
     private HashMap<Integer, MenuComponentObject> componentMap = new HashMap<>();
 
     public MenuObject(@Nonnull Menu menu, @Nullable HashMap<String, Object> props){
@@ -33,11 +36,23 @@ public class MenuObject {
 
     }
 
+    public void updateState(String key, Object value){
+        MenuStateUpdateEvent stateUpdateEvent = new MenuStateUpdateEvent(this, key, getStates().get(key), value);
+        getStates().put(key, value);
+        Bukkit.getPluginManager().callEvent(stateUpdateEvent);
+    }
+
     // TODO Render current page
     public void render(){
+        MenuPreRenderEvent preRenderEvent = new MenuPreRenderEvent(this, getProps());
+        Bukkit.getPluginManager().callEvent(preRenderEvent);
+
         setInventory(prepareInventory());
         mappingComponent();
         visualizeMap();
+
+        MenuPostRenderEvent postRenderEvent = new MenuPostRenderEvent(this);
+        Bukkit.getPluginManager().callEvent(postRenderEvent);
     }
 
     public void visualizeMap(){
@@ -81,8 +96,9 @@ public class MenuObject {
     }
 
     public void setPage(int page){
-        boolean isNotSamePage = this.page != page;
+        this.previousPage = this.page;
         this.page = page;
+        boolean isNotSamePage = this.page != this.previousPage;
 
         if (isNotSamePage) render();
     }
@@ -97,6 +113,10 @@ public class MenuObject {
 
     public int getRow() {
         return row;
+    }
+
+    public int getPreviousPage() {
+        return previousPage;
     }
 
     public int getPage() {

@@ -45,7 +45,7 @@ public class MenuComponent {
     }
 
     public MenuComponentObject render(@Nonnull MenuObject menuObject, @Nullable HashMap<String, Object> props){
-        MenuComponentObject object = new MenuComponentObject(getComponentId());
+        MenuComponentObject object = new MenuComponentObject(menuObject, this);
         ComponentPreRenderEvent preRenderEvent = new ComponentPreRenderEvent(menuObject, this, object, props);
         Bukkit.getPluginManager().callEvent(preRenderEvent);
 
