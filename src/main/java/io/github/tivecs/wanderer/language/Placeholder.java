@@ -29,6 +29,7 @@ public class Placeholder implements Cloneable {
                 meta.setLore(useForList(meta.getLore()));
             }
         }
+        item.setItemMeta(meta);
         return item;
     }
 
