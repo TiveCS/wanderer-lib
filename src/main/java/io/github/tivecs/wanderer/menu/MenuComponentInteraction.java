@@ -7,9 +7,9 @@ import io.github.tivecs.wanderer.menu.events.ComponentStateUpdateEvent;
 
 public interface MenuComponentInteraction {
 
-    void onClick(ComponentClickEvent event);
-    void onStateUpdate(ComponentStateUpdateEvent event);
-    void onPreRender(ComponentPreRenderEvent event);
-    void onPostRender(ComponentPostRenderEvent event);
+    default void onClick(ComponentClickEvent event){}
+    default void onStateUpdate(ComponentStateUpdateEvent event){}
+    default void onPreRender(ComponentPreRenderEvent event){}
+    default void onPostRender(ComponentPostRenderEvent event){}
 
 }

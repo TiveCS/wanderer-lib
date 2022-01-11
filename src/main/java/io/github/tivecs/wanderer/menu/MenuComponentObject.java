@@ -32,17 +32,18 @@ public class MenuComponentObject {
 
     public void render(){
         if (getBaseItem() != null){
-            setCurrentItem(getPlaceholder().useForItem(getBaseItem().clone()));
+            ItemStack currentItem = getBaseItem().clone();
+            currentItem = getPlaceholder().useForItem(currentItem);
+            setCurrentItem(currentItem);
         }
     }
 
     public void updatePlaceholder(){
-        getPlaceholder().getPlaceholders().clear();
         for (Map.Entry<String, Object> entry : getProps().entrySet()){
             getPlaceholder().set("props_" + entry.getKey(), (String) entry.getValue());
         }
 
-        for (Map.Entry<String, Object> entry : getProps().entrySet()){
+        for (Map.Entry<String, Object> entry : getStates().entrySet()){
             getPlaceholder().set("state_" + entry.getKey(), (String) entry.getValue());
         }
     }

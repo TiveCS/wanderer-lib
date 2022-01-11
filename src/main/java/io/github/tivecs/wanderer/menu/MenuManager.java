@@ -34,6 +34,7 @@ public class MenuManager{
         if (m != null){
             MenuObject mo = m.toObject(props, page);
             player.openInventory(mo.getInventory());
+            getPlayerMenu().put(player.getUniqueId(), mo);
         }
     }
 

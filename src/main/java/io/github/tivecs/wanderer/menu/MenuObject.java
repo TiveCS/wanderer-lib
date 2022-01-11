@@ -33,7 +33,6 @@ public class MenuObject {
         if (rowSize > 0){
             this.row = rowSize;
         }
-
     }
 
     public void updateState(String key, Object value){
