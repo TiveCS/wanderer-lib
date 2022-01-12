@@ -17,16 +17,24 @@ public class MenuComponentObject {
     private final HashMap<String, Object> states = new HashMap<>();
     private final HashMap<String, Object> props = new HashMap<>();
 
+    private int slot;
     private ItemStack baseItem = null, currentItem = null;
 
-    public MenuComponentObject(@Nonnull MenuObject menuObject, @Nonnull MenuComponent component){
+    public MenuComponentObject(@Nonnull MenuObject menuObject, @Nonnull MenuComponent component, int slot){
         this.menuObject = menuObject;
         this.component = component;
+        this.slot = slot;
     }
 
+    // TODO Re-visualize component object if state was updated.
     public void updateState(String key, Object value){
         ComponentStateUpdateEvent stateUpdateEvent = new ComponentStateUpdateEvent(this, key, getStates().get(key), value);
+
         getStates().put(key, value);
+        getPlaceholder().set("state_" + key, value.toString());
+        render();
+        getMenuObject().visualizeSlot(getSlot());
+
         Bukkit.getPluginManager().callEvent(stateUpdateEvent);
     }
 
@@ -40,11 +48,11 @@ public class MenuComponentObject {
 
     public void updatePlaceholder(){
         for (Map.Entry<String, Object> entry : getProps().entrySet()){
-            getPlaceholder().set("props_" + entry.getKey(), (String) entry.getValue());
+            getPlaceholder().set("props_" + entry.getKey(), entry.getValue().toString());
         }
 
         for (Map.Entry<String, Object> entry : getStates().entrySet()){
-            getPlaceholder().set("state_" + entry.getKey(), (String) entry.getValue());
+            getPlaceholder().set("state_" + entry.getKey(), entry.getValue().toString());
         }
     }
 
@@ -78,6 +86,10 @@ public class MenuComponentObject {
 
     public Placeholder getPlaceholder() {
         return placeholder;
+    }
+
+    public int getSlot() {
+        return slot;
     }
 
     public ItemStack getCurrentItem() {

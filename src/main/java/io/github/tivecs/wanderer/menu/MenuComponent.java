@@ -31,6 +31,11 @@ public class MenuComponent {
         this.mapId = mapId;
     }
 
+    public MenuComponent setState(String key, Object value){
+        getStates().put(key, value);
+        return this;
+    }
+
     public ItemStack createItem(){
         ItemStack item = getMaterial().parseItem();
         ItemMeta meta = item.getItemMeta();
@@ -38,14 +43,13 @@ public class MenuComponent {
         if (getDisplayName() != null) meta.setDisplayName(StringUtils.colored(getDisplayName()));
         if (getLore() != null) meta.setLore(StringUtils.colored(getLore()));
         item.setItemMeta(meta);
-
         item.setAmount(getAmount());
 
         return item;
     }
 
-    public MenuComponentObject render(@Nonnull MenuObject menuObject, @Nullable HashMap<String, Object> props){
-        MenuComponentObject object = new MenuComponentObject(menuObject, this);
+    public MenuComponentObject render(@Nonnull MenuObject menuObject, int slot, @Nullable HashMap<String, Object> props){
+        MenuComponentObject object = new MenuComponentObject(menuObject, this, slot);
         ComponentPreRenderEvent preRenderEvent = new ComponentPreRenderEvent(menuObject, this, object, props);
         Bukkit.getPluginManager().callEvent(preRenderEvent);
 

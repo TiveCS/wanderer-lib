@@ -41,7 +41,6 @@ public class MenuObject {
         Bukkit.getPluginManager().callEvent(stateUpdateEvent);
     }
 
-    // TODO Render current page
     public void render(){
         MenuPreRenderEvent preRenderEvent = new MenuPreRenderEvent(this, getProps());
         Bukkit.getPluginManager().callEvent(preRenderEvent);
@@ -61,7 +60,14 @@ public class MenuObject {
         }
     }
 
-    // TODO Add component render event
+    public void visualizeSlot(int slot){
+        getInventory().clear(slot);
+        MenuComponentObject componentObject = getComponentMap().get(slot);
+        if (componentObject != null){
+            getInventory().setItem(slot, componentObject.getCurrentItem());
+        }
+    }
+
     public void mappingComponent(){
         getComponentMap().clear();
         if (getInventory() != null){
@@ -75,8 +81,7 @@ public class MenuObject {
                     MenuComponent component = getMenu().findComponent(mapId);
 
                     if (component != null){
-                        MenuComponentObject componentObject = component.render(this, getProps());
-                        componentObject.render();
+                        MenuComponentObject componentObject = component.render(this, slot, getProps());
                         getComponentMap().put(slot, componentObject);
                     }
                 }
@@ -89,8 +94,15 @@ public class MenuObject {
         if (menu.getTitle() != null){
             inv = Bukkit.createInventory(null, getRow()*9, StringUtils.colored(menu.getTitle()));
         }else{
-            inv = Bukkit.createInventory(null, getRow()*9);
+            if (getInventory() != null){
+                inv = getInventory();
+            }else {
+                inv = Bukkit.createInventory(null, getRow() * 9);
+            }
         }
+
+        inv.clear();
+        getComponentMap().clear();
         return inv;
     }
 

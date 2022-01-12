@@ -58,11 +58,8 @@ public abstract class Menu {
         return component;
     }
 
-    // TODO ADD METHOD TO EXPORT INTO MENU OBJECT
     public MenuObject toObject(@Nullable HashMap<String, Object> props, int page){
         MenuObject menuObject = new MenuObject(this, props);
-        // TODO Component need to duplicate (or at least the component state need to duplicate)
-
         menuObject.setPage(page);
         return menuObject;
     }
