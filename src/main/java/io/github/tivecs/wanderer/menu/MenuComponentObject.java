@@ -17,6 +17,7 @@ public class MenuComponentObject {
     private final HashMap<String, Object> states = new HashMap<>();
     private final HashMap<String, Object> props = new HashMap<>();
 
+    private int populationId = -1;
     private int slot;
     private ItemStack baseItem = null, currentItem = null;
 
@@ -26,7 +27,6 @@ public class MenuComponentObject {
         this.slot = slot;
     }
 
-    // TODO Re-visualize component object if state was updated.
     public void updateState(String key, Object value){
         ComponentStateUpdateEvent stateUpdateEvent = new ComponentStateUpdateEvent(this, key, getStates().get(key), value);
 
@@ -64,6 +64,10 @@ public class MenuComponentObject {
         this.currentItem = currentItem;
     }
 
+    public void setPopulationId(int populationId) {
+        this.populationId = populationId;
+    }
+
     public MenuComponent getComponent() {
         return component;
     }
@@ -90,6 +94,10 @@ public class MenuComponentObject {
 
     public int getSlot() {
         return slot;
+    }
+
+    public int getPopulationId() {
+        return populationId;
     }
 
     public ItemStack getCurrentItem() {

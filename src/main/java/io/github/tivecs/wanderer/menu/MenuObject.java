@@ -18,12 +18,14 @@ public class MenuObject {
     private final Menu menu;
     private final Placeholder placeholder = new Placeholder();
     private final HashMap<String, Object> props;
-    private HashMap<String, Object> states = new HashMap<>();
+    private final HashMap<String, Object> states = new HashMap<>();
 
     private Inventory inventory = null;
     private int row = 3;
     private int page = -1, previousPage = -1;
-    private HashMap<Integer, MenuComponentObject> componentMap = new HashMap<>();
+    private final HashMap<Integer, MenuComponentObject> componentMap = new HashMap<>();
+    private final HashMap<String, Integer> componentPopulation = new HashMap<>();
+    private final HashMap<String, Integer> potentialComponentPopulation = new HashMap<>();
 
     public MenuObject(@Nonnull Menu menu, @Nullable HashMap<String, Object> props){
         this.menu = menu;
@@ -45,6 +47,7 @@ public class MenuObject {
         MenuPreRenderEvent preRenderEvent = new MenuPreRenderEvent(this, getProps());
         Bukkit.getPluginManager().callEvent(preRenderEvent);
 
+        updateState("page", getPage());
         setInventory(prepareInventory());
         mappingComponent();
         visualizeMap();
@@ -70,6 +73,7 @@ public class MenuObject {
 
     public void mappingComponent(){
         getComponentMap().clear();
+        getComponentPopulation().clear();
         if (getInventory() != null){
             for (int row = 0; row < getRow(); row++){
                 String map = getMenu().getMapping().get(row);
@@ -81,8 +85,16 @@ public class MenuObject {
                     MenuComponent component = getMenu().findComponent(mapId);
 
                     if (component != null){
+                        String componentId = component.getComponentId();
+                        int potentialPop = getMenu().calculatePotentialPopulation(componentId, false);
+                        int population = getComponentPopulation().getOrDefault(componentId, 0);
+                        int populationId = (population + 1) + ((getPage() - 1) * potentialPop);
+
                         MenuComponentObject componentObject = component.render(this, slot, getProps());
+                        componentObject.setPopulationId(populationId);
+
                         getComponentMap().put(slot, componentObject);
+                        getComponentPopulation().put(componentId, populationId);
                     }
                 }
             }
@@ -140,6 +152,10 @@ public class MenuObject {
 
     public Inventory getInventory() {
         return inventory;
+    }
+
+    public HashMap<String, Integer> getComponentPopulation() {
+        return componentPopulation;
     }
 
     public HashMap<String, Object> getProps() {

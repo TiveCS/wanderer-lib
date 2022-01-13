@@ -18,9 +18,11 @@ public abstract class Menu {
     private final String id;
     private final Placeholder placeholder = new Placeholder();
     private final List<String> mapping = new ArrayList<>();
+    private final HashMap<String, Object> states = new HashMap<>();
+
     private final HashMap<String, MenuComponent> components = new HashMap<>();
     private final HashMap<Character, MenuComponent> componentsByMapId = new HashMap<>();
-    private final HashMap<String, Object> states = new HashMap<>();
+    private final HashMap<String, Integer> potentialComponentPopulation = new HashMap<>();
 
     private String title;
 
@@ -62,6 +64,22 @@ public abstract class Menu {
         MenuObject menuObject = new MenuObject(this, props);
         menuObject.setPage(page);
         return menuObject;
+    }
+
+    public int calculatePotentialPopulation(String componentId, boolean recalculate){
+        int potential = getPotentialComponentPopulation().getOrDefault(componentId, 0);
+        if (recalculate || (potential == 0 && !getPotentialComponentPopulation().containsKey(componentId))){
+
+            for (String map : getMapping()){
+                char[] mapIds = map.toCharArray();
+                for (char mapId : mapIds){
+                    if (getComponentsByMapId().containsKey(mapId)) potential++;
+                }
+            }
+
+            getPotentialComponentPopulation().put(componentId, potential);
+        }
+        return potential;
     }
 
     public MenuObject toObject(HashMap<String, Object> props){
@@ -116,4 +134,7 @@ public abstract class Menu {
         return id;
     }
 
+    private HashMap<String, Integer> getPotentialComponentPopulation() {
+        return potentialComponentPopulation;
+    }
 }
