@@ -6,11 +6,14 @@ import io.github.tivecs.wanderer.menu.events.MenuPreRenderEvent;
 import io.github.tivecs.wanderer.menu.events.MenuStateUpdateEvent;
 import io.github.tivecs.wanderer.utils.StringUtils;
 import org.bukkit.Bukkit;
+import org.bukkit.entity.HumanEntity;
 import org.bukkit.inventory.Inventory;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class MenuObject {
@@ -20,7 +23,7 @@ public class MenuObject {
     private final HashMap<String, Object> props;
     private final HashMap<String, Object> states = new HashMap<>();
 
-    private Inventory inventory = null;
+    private Inventory inventory = null, previousInventory = null;
     private int row = 3;
     private int page = -1, previousPage = -1;
     private final HashMap<Integer, MenuComponentObject> componentMap = new HashMap<>();
@@ -39,7 +42,11 @@ public class MenuObject {
 
     public void updateState(String key, Object value){
         MenuStateUpdateEvent stateUpdateEvent = new MenuStateUpdateEvent(this, key, getStates().get(key), value);
-        getStates().put(key, value);
+        StringBuilder keyPath = new StringBuilder("state_").append(key);
+
+        getStates().put(keyPath.toString(), value);
+        getPlaceholder().set(keyPath.toString(), value.toString());
+
         Bukkit.getPluginManager().callEvent(stateUpdateEvent);
     }
 
@@ -49,6 +56,7 @@ public class MenuObject {
 
         updateState("page", getPage());
         setInventory(prepareInventory());
+
         mappingComponent();
         visualizeMap();
 
@@ -104,7 +112,8 @@ public class MenuObject {
     public Inventory prepareInventory(){
         Inventory inv;
         if (menu.getTitle() != null){
-            inv = Bukkit.createInventory(null, getRow()*9, StringUtils.colored(menu.getTitle()));
+            String translatedTitle = StringUtils.colored(getPlaceholder().useLinear(menu.getTitle()));
+            inv = Bukkit.createInventory(null, getRow()*9, translatedTitle);
         }else{
             if (getInventory() != null){
                 inv = getInventory();
@@ -127,7 +136,24 @@ public class MenuObject {
     }
 
     private void setInventory(Inventory inventory) {
+        setPreviousInventory(getInventory());
         this.inventory = inventory;
+
+        if (hasPreviousInventory() && !isSameInventory()){
+            List<HumanEntity> viewers = new ArrayList<>(getPreviousInventory().getViewers());
+            for (HumanEntity viewer : viewers){
+                viewer.closeInventory();
+                viewer.openInventory(getInventory());
+            }
+        }
+    }
+
+    public boolean hasPreviousInventory(){
+        return getPreviousInventory() != null;
+    }
+
+    public boolean isSameInventory() {
+        return getInventory() == getPreviousInventory();
     }
 
     public Menu getMenu() {
@@ -144,6 +170,10 @@ public class MenuObject {
 
     public int getPage() {
         return page;
+    }
+
+    public Inventory getPreviousInventory() {
+        return previousInventory;
     }
 
     public Placeholder getPlaceholder() {
@@ -168,5 +198,9 @@ public class MenuObject {
 
     public HashMap<Integer, MenuComponentObject> getComponentMap() {
         return componentMap;
+    }
+
+    private void setPreviousInventory(Inventory previousInventory) {
+        this.previousInventory = previousInventory;
     }
 }
