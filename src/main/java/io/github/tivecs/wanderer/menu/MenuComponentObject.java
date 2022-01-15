@@ -1,6 +1,7 @@
 package io.github.tivecs.wanderer.menu;
 
 import io.github.tivecs.wanderer.language.Placeholder;
+import io.github.tivecs.wanderer.menu.events.ComponentCreationEvent;
 import io.github.tivecs.wanderer.menu.events.ComponentStateUpdateEvent;
 import org.bukkit.Bukkit;
 import org.bukkit.inventory.ItemStack;
@@ -26,6 +27,9 @@ public class MenuComponentObject {
         this.component = component;
         this.populationId = populationId;
         this.slot = slot;
+
+        ComponentCreationEvent creationEvent = new ComponentCreationEvent(menuObject, component, this);
+        Bukkit.getPluginManager().callEvent(creationEvent);
     }
 
     public void updateState(String key, Object value){
