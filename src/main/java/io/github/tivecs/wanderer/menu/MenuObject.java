@@ -56,7 +56,6 @@ public class MenuObject {
 
         updateState("page", getPage());
         setInventory(prepareInventory());
-
         mappingComponent();
         visualizeMap();
 
@@ -98,8 +97,7 @@ public class MenuObject {
                         int population = getComponentPopulation().getOrDefault(componentId, 0);
                         int populationId = (population + 1) + ((getPage() - 1) * potentialPop);
 
-                        MenuComponentObject componentObject = component.render(this, slot, getProps());
-                        componentObject.setPopulationId(populationId);
+                        MenuComponentObject componentObject = component.render(this, slot, populationId, getProps());
 
                         getComponentMap().put(slot, componentObject);
                         getComponentPopulation().put(componentId, populationId);

@@ -17,13 +17,14 @@ public class MenuComponentObject {
     private final HashMap<String, Object> states = new HashMap<>();
     private final HashMap<String, Object> props = new HashMap<>();
 
-    private int populationId = -1;
+    private int populationId;
     private int slot;
     private ItemStack baseItem = null, currentItem = null;
 
-    public MenuComponentObject(@Nonnull MenuObject menuObject, @Nonnull MenuComponent component, int slot){
+    public MenuComponentObject(@Nonnull MenuObject menuObject, @Nonnull MenuComponent component, int slot, int populationId){
         this.menuObject = menuObject;
         this.component = component;
+        this.populationId = populationId;
         this.slot = slot;
     }
 
