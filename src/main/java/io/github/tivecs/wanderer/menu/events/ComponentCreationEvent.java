@@ -36,6 +36,10 @@ public class ComponentCreationEvent extends Event {
 
     @Override
     public HandlerList getHandlers() {
-        return null;
+        return HANDLER_LIST;
+    }
+
+    public static HandlerList getHandlerList() {
+        return HANDLER_LIST;
     }
 }
