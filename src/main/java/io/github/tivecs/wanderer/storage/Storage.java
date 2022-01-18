@@ -3,6 +3,7 @@ package io.github.tivecs.wanderer.storage;
 import javax.annotation.Nullable;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
 /**
  * Base class for any storage type implementation.
@@ -14,12 +15,12 @@ public abstract class Storage {
     /**
      * Act as temporary storage.
      */
-    private final Map<Object, Object> data;
+    private final Map<Object, Optional<Object>> data;
 
     /**
      * Act as changes storage for any changes on specific data path.
      */
-    private final Map<Object, Object> dataChanges;
+    private final Map<Object, Optional<Object>> dataChanges;
 
     /**
      * Create storage object for new source.
@@ -48,7 +49,7 @@ public abstract class Storage {
      * @param args settings for reading data.
      * @return data from temporary storage.
      */
-    public abstract Object readData(HashMap<Object, Object> args);
+    public abstract Optional<Object> readData(HashMap<Object, Object> args);
 
     /**
      * Load and get data from source, then store the data into temporary storage.
@@ -80,13 +81,13 @@ public abstract class Storage {
      * Set the Map type of temporary storage and changes storage.
      * @return map type of storage
      */
-    public abstract Map<Object, Object> initializeDataMap();
+    public abstract Map<Object, Optional<Object>> initializeDataMap();
 
     /**
      * Get the temporary storage.
      * @return temporary storage
      */
-    public Map<Object, Object> getData() {
+    public Map<Object, Optional<Object>> getData() {
         return data;
     }
 
@@ -94,7 +95,7 @@ public abstract class Storage {
      * Get the changes storage.
      * @return changes storage
      */
-    public Map<Object, Object> getDataChanges() {
+    public Map<Object, Optional<Object>> getDataChanges() {
         return dataChanges;
     }
 

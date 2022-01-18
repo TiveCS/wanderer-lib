@@ -9,7 +9,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
+import java.util.Optional;
 
 public class StorageYML extends Storage{
 
@@ -48,7 +48,10 @@ public class StorageYML extends Storage{
         if (!overwrite && getData().containsKey(path)){
             return;
         }
-        getDataChanges().put(path, value);
+
+        Optional<Object> v = value != null ? Optional.of(value) : Optional.empty();
+
+        getDataChanges().put(path, v);
     }
 
     @Override
@@ -60,10 +63,7 @@ public class StorageYML extends Storage{
         if (args.containsKey("overwrite")){
             overwrite = (boolean) args.getOrDefault("overwrite", true);
         }
-        if (!overwrite && getData().containsKey(path)){
-            return;
-        }
-        getDataChanges().put(path, value);
+        writeData(path, value, overwrite);
     }
 
     /**
@@ -71,14 +71,13 @@ public class StorageYML extends Storage{
      * @param path the data path
      */
     public void deleteData(String path){
-        getDataChanges().put(path, null);
+        getDataChanges().put(path, Optional.empty());
     }
 
     @Override
     public void deleteData(HashMap<Object, Object> args) {
         String path = args.get("path").toString();
-
-        getDataChanges().put(path, null);
+        deleteData(path);
     }
 
     /**
@@ -97,7 +96,10 @@ public class StorageYML extends Storage{
         }
 
         for (String path : getConfig().getKeys(true)){
-            getData().put(path, getConfig().get(path));
+            Object value = getConfig().get(path);
+            Optional<Object> v = value != null ? Optional.of(value) : Optional.empty();
+
+            getData().put(path, v);
         }
     }
 
@@ -106,13 +108,14 @@ public class StorageYML extends Storage{
      * @param path the data path
      * @return data from temporary storage
      */
-    public Object readData(String path){
+    public Optional<Object> readData(String path){
         return getData().get(path);
     }
 
     @Override
-    public Object readData(HashMap<Object, Object> args) {
-        return getData().get(args.get("path"));
+    public Optional<Object> readData(HashMap<Object, Object> args) {
+        String path = args.get("path").toString();
+        return readData(path);
     }
 
     /**
@@ -124,7 +127,7 @@ public class StorageYML extends Storage{
 
     @Override
     public void saveData(HashMap<Object, Object> args) {
-        for (Map.Entry<Object, Object> entry : getDataChanges().entrySet()){
+        for (Map.Entry<Object, Optional<Object>> entry : getDataChanges().entrySet()){
             getData().put(entry.getKey(), entry.getValue());
         }
     }
@@ -158,8 +161,8 @@ public class StorageYML extends Storage{
     }
 
     @Override
-    public Map<Object, Object> initializeDataMap() {
-        return new ConcurrentHashMap<>();
+    public Map<Object, Optional<Object>> initializeDataMap() {
+        return new HashMap<>();
     }
 
     public FileConfiguration getConfig() {
