@@ -93,6 +93,8 @@ public class MenuObject {
 
                     if (component != null){
                         String componentId = component.getComponentId();
+
+                        // TODO Population Id on page > 1 behaviour is not as expected (5, 6, 7, ...). Occurred: 5, 8, 28, 114, ...
                         int potentialPop = getMenu().calculatePotentialPopulation(componentId, false);
                         int population = getComponentPopulation().getOrDefault(componentId, 0);
                         int populationId = (population + 1) + ((getPage() - 1) * potentialPop);

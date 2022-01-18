@@ -10,6 +10,7 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class StorageYML extends Storage{
 
@@ -162,7 +163,7 @@ public class StorageYML extends Storage{
 
     @Override
     public Map<Object, Optional<Object>> initializeDataMap() {
-        return new HashMap<>();
+        return new ConcurrentHashMap<>();
     }
 
     public FileConfiguration getConfig() {
