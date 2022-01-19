@@ -151,7 +151,8 @@ public class StorageYML extends Storage{
     @Override
     public void saveDataToSource(HashMap<Object, Object> args) {
         for (Object path : getDataChanges().keySet()){
-            getConfig().set(path.toString(), getDataChanges().get(path));
+            Optional<Object> value = getDataChanges().get(path);
+            getConfig().set(path.toString(), value.orElse(null));
         }
     }
 
