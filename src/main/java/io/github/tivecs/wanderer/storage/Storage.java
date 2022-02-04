@@ -99,6 +99,10 @@ public abstract class Storage {
         return dataChanges;
     }
 
+    public static Optional<Object> valueToOptional(@Nullable Object value){
+        return value != null ? Optional.of(value) : Optional.empty();
+    }
+
     public String getId() {
         return id;
     }
