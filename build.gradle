@@ -5,13 +5,14 @@ plugins {
 
 group 'io.github.tivecs'
 version '1.0.0'
-setSourceCompatibility(JavaVersion.VERSION_11)
 
 repositories {
     mavenCentral()
     mavenLocal()
+
     maven {
         url = 'https://hub.spigotmc.org/nexus/content/repositories/snapshots/'
+
         // As of Gradle 5.1, you can limit this to only those
         // dependencies you expect from it
         content {
@@ -19,6 +20,7 @@ repositories {
             includeGroup 'org.spigotmc'
         }
     }
+
     maven { url = 'https://oss.sonatype.org/content/repositories/snapshots' }
     maven { url = 'https://oss.sonatype.org/content/repositories/central' }
     maven { url = uri("https://repo.xenondevs.xyz/releases") }
