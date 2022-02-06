@@ -5,6 +5,8 @@ plugins {
 
 group 'io.github.tivecs'
 version '1.0.0'
+setSourceCompatibility(JavaVersion.VERSION_11)
+
 repositories {
     mavenCentral()
     mavenLocal()
