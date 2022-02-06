@@ -38,7 +38,7 @@ dependencies {
 }
 
 shadowJar{
-    destinationDirectory.set(file('server/plugins'))
+
     manifest {
         attributes 'Main-Class': 'io.github.tivecs.etherskill.EtherSkill'
     }
