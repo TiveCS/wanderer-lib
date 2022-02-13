@@ -102,7 +102,8 @@ public class MenuObject {
                         int potentialPop = getMenu().calculatePotentialPopulation(componentId, false);
                         int population = components != null ? components.size() : 0;
                         int populationId = (population + 1) + ((getPage() - 1) * potentialPop);
-                        System.out.println(componentId +  " >> page:" + getPage() + ", pop:" + population + ", id: " + populationId + ", pot: " + potentialPop);
+
+                        System.out.println(componentId +  " | >> page:" + getPage() + ", pop:" + population + ", id: " + populationId + ", pot: " + potentialPop);
 
                         MenuComponentObject componentObject = component.render(this, slot, populationId, getProps());
 
