@@ -5,14 +5,20 @@ import java.util.LinkedHashMap;
 
 public class MenuPagePopulation {
 
-    private MenuObject menuObject;
-    private int page;
+    private final MenuObject menuObject;
+    private final int page;
 
-    private HashMap<String, LinkedHashMap<Integer, MenuComponentObject>> componentPopulations = new HashMap<>();
+    private final HashMap<String, LinkedHashMap<Integer, MenuComponentObject>> componentPopulations = new HashMap<>();
 
     public MenuPagePopulation(MenuObject menuObject, int page){
         this.menuObject = menuObject;
         this.page = page;
+    }
+
+    public void reset(){
+        for (LinkedHashMap<Integer, MenuComponentObject> components : getComponentPopulations().values()){
+            components.clear();
+        }
     }
 
     public void registerComponent(MenuComponentObject componentObject){

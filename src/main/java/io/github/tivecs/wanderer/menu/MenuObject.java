@@ -25,7 +25,6 @@ public class MenuObject {
     private int row = 3;
     private int page = -1, previousPage = -1;
     private final HashMap<Integer, MenuComponentObject> componentMap = new HashMap<>();
-    private final HashMap<String, Integer> componentPopulation = new HashMap<>();
     private final HashMap<Integer, MenuPagePopulation> pagePopulations = new HashMap<>();
     private final HashMap<String, Integer> potentialComponentPopulation = new HashMap<>();
 
@@ -80,12 +79,12 @@ public class MenuObject {
 
     public void mappingComponent(){
         getComponentMap().clear();
-        getComponentPopulation().clear();
         if (getInventory() != null){
             for (int row = 0; row < getRow(); row++){
                 String map = getMenu().getMapping().get(row);
                 char[] mapIds = map.toCharArray();
                 MenuPagePopulation pagePopulation = getPagePopulations().getOrDefault(getPage(), new MenuPagePopulation(this, getPage()));
+                pagePopulation.reset();
 
                 for (int column = 0; column < 9; column++){
                     int slot = (row*9) + column;
@@ -109,7 +108,6 @@ public class MenuObject {
 
                         pagePopulation.registerComponent(componentObject);
                         getComponentMap().put(slot, componentObject);
-                        //getComponentPopulation().put(componentId, populationId);
                     }
                 }
 
@@ -191,10 +189,6 @@ public class MenuObject {
 
     public Inventory getInventory() {
         return inventory;
-    }
-
-    public HashMap<String, Integer> getComponentPopulation() {
-        return componentPopulation;
     }
 
     public HashMap<String, Object> getProps() {
