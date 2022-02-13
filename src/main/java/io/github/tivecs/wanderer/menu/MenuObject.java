@@ -26,7 +26,6 @@ public class MenuObject {
     private int page = -1, previousPage = -1;
     private final HashMap<Integer, MenuComponentObject> componentMap = new HashMap<>();
     private final HashMap<Integer, MenuPagePopulation> pagePopulations = new HashMap<>();
-    private final HashMap<String, Integer> potentialComponentPopulation = new HashMap<>();
 
     public MenuObject(@Nullable MenuManager manager, @Nonnull Menu menu, @Nullable HashMap<String, Object> props){
         this.manager = manager;
@@ -36,6 +35,16 @@ public class MenuObject {
         int rowSize = menu.getMapping().size();
         if (rowSize > 0){
             this.row = rowSize;
+        }
+
+        initPropsPlaceholder();
+    }
+
+    public void initPropsPlaceholder(){
+        if (getProps() != null){
+            for (Map.Entry<String, Object> entry : getProps().entrySet()){
+                getPlaceholder().set("props_" + entry.getKey(), entry.getValue() + "");
+            }
         }
     }
 
