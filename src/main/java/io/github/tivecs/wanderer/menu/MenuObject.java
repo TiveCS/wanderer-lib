@@ -84,6 +84,7 @@ public class MenuObject {
         getComponentMap().clear();
         getComponentPopulation().clear();
         if (getInventory() != null){
+            System.out.println(getMenu().getPotentialComponentPopulation());
             for (int row = 0; row < getRow(); row++){
                 String map = getMenu().getMapping().get(row);
                 char[] mapIds = map.toCharArray();

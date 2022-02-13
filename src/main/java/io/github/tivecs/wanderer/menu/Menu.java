@@ -138,7 +138,7 @@ public abstract class Menu {
         return id;
     }
 
-    private HashMap<String, Integer> getPotentialComponentPopulation() {
+    protected HashMap<String, Integer> getPotentialComponentPopulation() {
         return potentialComponentPopulation;
     }
 }
