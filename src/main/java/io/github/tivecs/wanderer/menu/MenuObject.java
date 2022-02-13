@@ -18,6 +18,7 @@ import java.util.Map;
 
 public class MenuObject {
 
+    private final MenuManager manager;
     private final Menu menu;
     private final Placeholder placeholder = new Placeholder();
     private final HashMap<String, Object> props;
@@ -30,7 +31,8 @@ public class MenuObject {
     private final HashMap<String, Integer> componentPopulation = new HashMap<>();
     private final HashMap<String, Integer> potentialComponentPopulation = new HashMap<>();
 
-    public MenuObject(@Nonnull Menu menu, @Nullable HashMap<String, Object> props){
+    public MenuObject(@Nullable MenuManager manager, @Nonnull Menu menu, @Nullable HashMap<String, Object> props){
+        this.manager = manager;
         this.menu = menu;
         this.props = props != null ? new HashMap<>(props) : null;
 
@@ -98,6 +100,7 @@ public class MenuObject {
                         int potentialPop = getMenu().calculatePotentialPopulation(componentId, false);
                         int population = getComponentPopulation().getOrDefault(componentId, 0);
                         int populationId = (population + 1) + ((getPage() - 1) * potentialPop);
+                        System.out.println(population + " == " + populationId);
 
                         MenuComponentObject componentObject = component.render(this, slot, populationId, getProps());
 
@@ -198,6 +201,10 @@ public class MenuObject {
 
     public HashMap<Integer, MenuComponentObject> getComponentMap() {
         return componentMap;
+    }
+
+    public MenuManager getManager() {
+        return manager;
     }
 
     private void setPreviousInventory(Inventory previousInventory) {

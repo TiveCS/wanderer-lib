@@ -60,10 +60,14 @@ public abstract class Menu {
         return component;
     }
 
-    public MenuObject toObject(@Nullable HashMap<String, Object> props, int page){
-        MenuObject menuObject = new MenuObject(this, props);
+    public MenuObject toObject(@Nullable MenuManager manager, @Nullable HashMap<String, Object> props, int page){
+        MenuObject menuObject = new MenuObject(manager, this, props);
         menuObject.setPage(page);
         return menuObject;
+    }
+
+    public MenuObject toObject(@Nullable HashMap<String, Object> props, int page){
+        return toObject(null, props, page);
     }
 
     public int calculatePotentialPopulation(String componentId, boolean recalculate){
