@@ -83,6 +83,7 @@ public class MenuObject {
             for (int row = 0; row < getRow(); row++){
                 String map = getMenu().getMapping().get(row);
                 char[] mapIds = map.toCharArray();
+
                 MenuPagePopulation pagePopulation = getPagePopulations().getOrDefault(getPage(), new MenuPagePopulation(this, getPage()));
                 pagePopulation.reset();
 
@@ -94,15 +95,11 @@ public class MenuObject {
                     if (component != null){
                         String componentId = component.getComponentId();
 
-                        // TODO Population Id on page > 1 behaviour is not as expected (5, 6, 7, ...). Occurred: 5, 8, 28, 114, ...
-                        // TODO Change ComponentPopulation to ComponentPopulationPerPage (content: population id per component in that page)
                         LinkedHashMap<Integer, MenuComponentObject> components = pagePopulation.getComponents(componentId);
 
                         int potentialPop = getMenu().calculatePotentialPopulation(componentId, false);
                         int population = components != null ? components.size() : 0;
                         int populationId = (population + 1) + ((getPage() - 1) * potentialPop);
-
-                        System.out.println(componentId +  " | >> page:" + getPage() + ", pop:" + population + ", id: " + populationId + ", pot: " + potentialPop);
 
                         MenuComponentObject componentObject = component.render(this, slot, populationId, getProps());
 
