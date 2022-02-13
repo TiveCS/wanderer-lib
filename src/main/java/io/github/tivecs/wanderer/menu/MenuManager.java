@@ -32,7 +32,7 @@ public class MenuManager{
     public void open(@Nonnull Player player, @Nonnull String menuId, int page, @Nullable HashMap<String, Object> props){
         Menu m = findMenu(menuId);
         if (m != null){
-            MenuObject mo = m.toObject(props, page);
+            MenuObject mo = m.toObject(this, props, page);
             player.openInventory(mo.getInventory());
             getPlayerMenu().put(player.getUniqueId(), mo);
         }

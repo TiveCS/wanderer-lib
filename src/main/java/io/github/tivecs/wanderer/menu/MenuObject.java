@@ -11,10 +11,7 @@ import org.bukkit.inventory.Inventory;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class MenuObject {
 
@@ -29,6 +26,7 @@ public class MenuObject {
     private int page = -1, previousPage = -1;
     private final HashMap<Integer, MenuComponentObject> componentMap = new HashMap<>();
     private final HashMap<String, Integer> componentPopulation = new HashMap<>();
+    private final HashMap<Integer, MenuPagePopulation> pagePopulations = new HashMap<>();
     private final HashMap<String, Integer> potentialComponentPopulation = new HashMap<>();
 
     public MenuObject(@Nullable MenuManager manager, @Nonnull Menu menu, @Nullable HashMap<String, Object> props){
@@ -87,6 +85,7 @@ public class MenuObject {
             for (int row = 0; row < getRow(); row++){
                 String map = getMenu().getMapping().get(row);
                 char[] mapIds = map.toCharArray();
+                MenuPagePopulation pagePopulation = getPagePopulations().getOrDefault(getPage(), new MenuPagePopulation(this, getPage()));
 
                 for (int column = 0; column < 9; column++){
                     int slot = (row*9) + column;
@@ -97,17 +96,23 @@ public class MenuObject {
                         String componentId = component.getComponentId();
 
                         // TODO Population Id on page > 1 behaviour is not as expected (5, 6, 7, ...). Occurred: 5, 8, 28, 114, ...
+                        // TODO Change ComponentPopulation to ComponentPopulationPerPage (content: population id per component in that page)
+                        LinkedHashMap<Integer, MenuComponentObject> components = pagePopulation.getComponents(componentId);
+
                         int potentialPop = getMenu().calculatePotentialPopulation(componentId, false);
-                        int population = getComponentPopulation().getOrDefault(componentId, 0);
+                        int population = components != null ? components.size() : 0;
                         int populationId = (population + 1) + ((getPage() - 1) * potentialPop);
                         System.out.println(componentId +  " >> page:" + getPage() + ", pop:" + population + ", id: " + populationId + ", pot: " + potentialPop);
 
                         MenuComponentObject componentObject = component.render(this, slot, populationId, getProps());
 
+                        pagePopulation.registerComponent(componentObject);
                         getComponentMap().put(slot, componentObject);
-                        getComponentPopulation().put(componentId, populationId);
+                        //getComponentPopulation().put(componentId, populationId);
                     }
                 }
+
+                getPagePopulations().put(getPage(), pagePopulation);
             }
         }
     }
@@ -205,6 +210,10 @@ public class MenuObject {
 
     public MenuManager getManager() {
         return manager;
+    }
+
+    public HashMap<Integer, MenuPagePopulation> getPagePopulations() {
+        return pagePopulations;
     }
 
     private void setPreviousInventory(Inventory previousInventory) {
