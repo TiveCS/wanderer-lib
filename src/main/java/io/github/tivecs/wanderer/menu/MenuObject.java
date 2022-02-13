@@ -100,7 +100,7 @@ public class MenuObject {
                         int potentialPop = getMenu().calculatePotentialPopulation(componentId, false);
                         int population = getComponentPopulation().getOrDefault(componentId, 0);
                         int populationId = (population + 1) + ((getPage() - 1) * potentialPop);
-                        System.out.println(componentId +  " >> " + population + " == " + populationId);
+                        System.out.println(componentId +  " >> pop:" + population + ", id: " + populationId + ", pot: " + potentialPop);
 
                         MenuComponentObject componentObject = component.render(this, slot, populationId, getProps());
 
