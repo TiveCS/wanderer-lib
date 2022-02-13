@@ -77,7 +77,8 @@ public abstract class Menu {
             for (String map : getMapping()){
                 char[] mapIds = map.toCharArray();
                 for (char mapId : mapIds){
-                    if (getComponentsByMapId().containsKey(mapId)) potential++;
+                    MenuComponent component = getComponentsByMapId().get(mapId);
+                    if (component != null && component.getComponentId().equals(componentId)) potential++;
                 }
             }
 
